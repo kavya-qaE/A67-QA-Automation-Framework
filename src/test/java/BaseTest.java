@@ -86,4 +86,19 @@ public class BaseTest {
         WebElement notification=driver.findElement(By.cssSelector("div.success.show"));
         return notification.getText();
     }
+
+    public void clickPlayOrResumeBtn() {
+        WebElement playBtn=driver.findElement(By.cssSelector("[data-testid='play-btn']"));
+        playBtn.click();
+    }
+
+    public void clickPlayNextSongBtn() {
+        WebElement playNextSongBtn= driver.findElement(By.cssSelector("[data-testid=\"play-next-btn\"]"));
+        playNextSongBtn.click();
+    }
+
+    public boolean getSoundBar() {
+        WebElement soundBar=driver.findElement(By.cssSelector("[data-testid=\"sound-bar-play\"]"));
+        return soundBar.isDisplayed();
+    }
 }
