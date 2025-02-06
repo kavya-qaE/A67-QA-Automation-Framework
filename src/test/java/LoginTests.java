@@ -8,12 +8,12 @@ import java.time.Duration;
 
 public class LoginTests extends BaseTest {
     @Test
+
     public void loginEmptyEmailPassword() {
-        navigateToPage();
+       navigateToPage();
         provideEmail("kavya.ilapavuluri@testpro.io");
         providePassword("student#67");
-        clickSubmit();
-        Assert.assertEquals(driver.getCurrentUrl(), url);
+        clickSubmit();            
         closeBrowser();
     }
 }

@@ -101,4 +101,5 @@ public class BaseTest {
         WebElement soundBar=driver.findElement(By.cssSelector("[data-testid=\"sound-bar-play\"]"));
         return soundBar.isDisplayed();
     }
+
 }
