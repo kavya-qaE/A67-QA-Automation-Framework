@@ -1,3 +1,4 @@
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -6,14 +7,11 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 
-public class LoginTests extends BaseTest {
+
+public class Homework16 extends BaseTest{
     @Test
-    public void loginEmptyEmailPassword{
-        navigateToPage();
-        provideEmail("kavya.ilapavuluri@testpro.io");
-        providePassword("student#67");
-        clickSubmit();
-      Added ChromeOptions argument below to fix websocket error
+    public void registrationNavigation(){
+        //Added ChromeOptions argument below to fix websocket error
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
 
@@ -22,7 +20,14 @@ public class LoginTests extends BaseTest {
 
         String url = "https://qa.koel.app/";
         driver.get(url);
-        Assert.assertEquals(driver.getCurrentUrl(), url);
-        closeBrowser();
+
+        //Click on Registration link
+        driver.findElement(By.cssSelector("a[href='registration']")).click();
+
+        //Verify Registration page
+        String url1 = "https://qa.koel.app/registration";
+        driver.get(url1);
+        Assert.assertEquals(driver.getCurrentUrl(), url1);
+        driver.quit();
     }
 }
