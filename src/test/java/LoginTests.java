@@ -13,7 +13,6 @@ public class LoginTests extends BaseTest {
        navigateToPage();
         provideEmail("kavya.ilapavuluri@testpro.io");
         providePassword("student#67");
-        clickSubmit();            
-        closeBrowser();
+        clickSubmit();
     }
 }
