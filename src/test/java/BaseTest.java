@@ -1,5 +1,6 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -10,7 +11,6 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Parameters;
 
 import java.time.Duration;
-
 public class BaseTest {
     public WebDriver driver=null;
     String url=null;
@@ -124,5 +124,28 @@ public class BaseTest {
     public String getDeleteSuccessMsg() {
         WebElement deleteMsg= driver.findElement(By.cssSelector("div.success.show"));
         return deleteMsg.getText();
+    }
+
+    public void clickPlusToCreate() {
+        WebElement createPlaylistBtn=driver.findElement(By.cssSelector("[data-testid=\"sidebar-create-playlist-btn\"]"));
+        createPlaylistBtn.click();
+    }
+
+    public void clickNewPlaylistToCreate() {
+        WebElement newPlaylist1= driver.findElement(By.xpath("//section[@id=\"playlists\"]//nav[@class=\"menu playlist-menu\"]//li[@data-testid=\"playlist-context-menu-create-simple\"]"));
+        newPlaylist1.click();
+    }
+
+    public void inputNewPlaylistName(String name) throws InterruptedException {
+        WebElement newPlaylistName= driver.findElement(By.xpath("//form[@class='create']//input[@name='name']"));
+        newPlaylistName.clear();
+        newPlaylistName.sendKeys(name);
+        newPlaylistName.sendKeys(Keys.ENTER);
+        Thread.sleep(3000);
+    }
+
+    protected String getCreateSuccessMsg() {
+        WebElement createMsg= driver.findElement(By.cssSelector("div.success.show"));
+        return createMsg.getText();
     }
 }
