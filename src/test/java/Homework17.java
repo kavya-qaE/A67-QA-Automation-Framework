@@ -3,8 +3,8 @@ import org.testng.annotations.Test;
 
 public class Homework17 extends BaseTest{
     @Test
-    public void addSongsToPlaylist() throws InterruptedException {
-        String expectedSongAddedMsg="Added 1 song into \"first playlist.\"";
+    public void addSongsToPlaylist() {
+        String expectedSongAddedMsg="Added 1 song into \"apple.\"";
 
         navigateToPage();
         provideEmail("kavya.ilapavuluri@testpro.io");
