@@ -1,5 +1,6 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -7,25 +8,27 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Parameters;
 
 import java.time.Duration;
-
 public class BaseTest {
     public WebDriver driver=null;
-    String url = "https://qa.koel.app/";
+    String url=null;
     @BeforeSuite
     static void setupClass() {
         WebDriverManager.chromedriver().setup();
     }
 
     @BeforeMethod
-    public void launchBrowser() {
+    @Parameters({"BaseURL"})
+    public void launchBrowser(String BaseURL) {
         //      Added ChromeOptions argument below to fix websocket error
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
          driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
+        url=BaseURL;
     }
 
     public void navigateToPage() {
@@ -102,4 +105,47 @@ public class BaseTest {
         return soundBar.isDisplayed();
     }
 
+    public void choosePlaylistToDelete() {
+        WebElement playlistNameToDelete= driver.findElement(By.xpath("//nav[@id=\"sidebar\"]//section[@id=\"playlists\"]//ul/li[4]"));
+        playlistNameToDelete.click();
+    }
+
+    public void clickRedPlaylistBtn() throws InterruptedException {
+        WebElement redPlaylistBtn= driver.findElement(By.cssSelector("button[class='del btn-delete-playlist']"));
+        redPlaylistBtn.click();
+        Thread.sleep(3000);
+    }
+
+  /*  public void clickOkDialogBtn() {
+        WebElement okBtn= driver.findElement(By.cssSelector("button.ok"));
+        okBtn.click();
+    }*/
+
+    public String getDeleteSuccessMsg() {
+        WebElement deleteMsg= driver.findElement(By.cssSelector("div.success.show"));
+        return deleteMsg.getText();
+    }
+
+    public void clickPlusToCreate() {
+        WebElement createPlaylistBtn=driver.findElement(By.cssSelector("[data-testid=\"sidebar-create-playlist-btn\"]"));
+        createPlaylistBtn.click();
+    }
+
+    public void clickNewPlaylistToCreate() {
+        WebElement newPlaylist1= driver.findElement(By.xpath("//section[@id=\"playlists\"]//nav[@class=\"menu playlist-menu\"]//li[@data-testid=\"playlist-context-menu-create-simple\"]"));
+        newPlaylist1.click();
+    }
+
+    public void inputNewPlaylistName(String name) throws InterruptedException {
+        WebElement newPlaylistName= driver.findElement(By.xpath("//form[@class='create']//input[@name='name']"));
+        newPlaylistName.clear();
+        newPlaylistName.sendKeys(name);
+        newPlaylistName.sendKeys(Keys.ENTER);
+        Thread.sleep(3000);
+    }
+
+    protected String getCreateSuccessMsg() {
+        WebElement createMsg= driver.findElement(By.cssSelector("div.success.show"));
+        return createMsg.getText();
+    }
 }
