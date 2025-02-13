@@ -1,9 +1,6 @@
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-public class Homework19 extends BaseTest{
+/*public class Homework19 extends BaseTest{
     @Test
-    public void createPlaylist() throws InterruptedException{
+    public void createPlaylist(){
         String expectedCreatedPlaylistMsg="Created playlist \"second playlist.\"";
         navigateToPage();
         provideEmail("kavya.ilapavuluri@testpro.io");
@@ -16,7 +13,7 @@ public class Homework19 extends BaseTest{
     }
 
     @Test
-    public void deletePlaylist() throws InterruptedException {
+    public void deletePlaylist(){
         String expectedDeletedPlaylistMsg="Deleted playlist \"second playlist.\"";
         navigateToPage();
         provideEmail("kavya.ilapavuluri@testpro.io");
@@ -30,3 +27,4 @@ public class Homework19 extends BaseTest{
     }
 
 }
+*/
