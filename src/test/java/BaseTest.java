@@ -1,3 +1,4 @@
+import com.github.javafaker.Faker;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -162,15 +163,22 @@ public class BaseTest {
         return successMsg.getText();
     }
 
-    public void enterNewPlaylistName() {
-        WebElement playlistInputField=wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[@name='name']")));
+    public String generateRandomName(){
+        Faker faker = new Faker();
+        String newName = faker.name().firstName();
+        return newName;
+    }
+
+    public void enterNewPlaylistName(String name) {
+        WebElement playlistInputField=wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='inline-playlist-name-input']")));
         playlistInputField.sendKeys(Keys.chord(Keys.CONTROL+"A",Keys.BACK_SPACE));
-        playlistInputField.sendKeys("first playlist");
+
+        playlistInputField.sendKeys(name);
         playlistInputField.sendKeys(Keys.ENTER);
     }
 
     public  void doubleClickPlaylist(){
-        WebElement playlistToRename= wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".playlist:nth-child(4)")));
+        WebElement playlistToRename= wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".playlist.playlist:nth-of-type(3)")));
         action.doubleClick(playlistToRename).perform();
         System.out.println("double click performed.");
     }

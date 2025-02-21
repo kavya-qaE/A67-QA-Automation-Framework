@@ -4,7 +4,8 @@ import org.testng.annotations.Test;
 public class Homework21 extends BaseTest{
     @Test
     public void renamePlaylist(){
-        String expectedSuccessMsg="Updated playlist\"apple.\"";
+        String name=generateRandomName();
+        String expectedSuccessMsg="Updated playlist \"" + name +"."+ "\"";
 
         provideEmail("kavya.ilapavuluri@testpro.io");
         providePassword("student#67");
@@ -12,7 +13,7 @@ public class Homework21 extends BaseTest{
         doubleClickPlaylist();
         //rightClickPlaylistToRename();
        //clickEditToRename();
-      enterNewPlaylistName();
+      enterNewPlaylistName(name);
       Assert.assertEquals(getUpdateSuccessMsg(),expectedSuccessMsg);
     }
 }
