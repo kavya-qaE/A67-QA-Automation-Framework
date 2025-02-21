@@ -1,3 +1,4 @@
+import com.github.javafaker.Faker;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -5,15 +6,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
 
 import java.time.Duration;
+
 public class BaseTest {
     public WebDriver driver=null;
     public WebDriverWait wait=null;
     String url=null;
+    Actions action=null;
 
     @DataProvider(name = "playlistNames")
     public Object[][] playlistNames(){
@@ -37,6 +41,7 @@ public class BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
         wait=new WebDriverWait(driver,Duration.ofSeconds(10));
+        action=new Actions(driver);
         url=BaseURL;
         navigateToPage();
     }
@@ -152,4 +157,43 @@ public class BaseTest {
         WebElement createMsg= wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.success.show")));
         return createMsg.getText();
     }
+
+    public String getUpdateSuccessMsg() {
+        WebElement successMsg= driver.findElement(By.cssSelector("div.success.show"));
+        return successMsg.getText();
+    }
+
+    public String generateRandomName(){
+        Faker faker = new Faker();
+        String newName = faker.name().firstName();
+        return newName;
+    }
+
+    public void enterNewPlaylistName(String name) {
+        WebElement playlistInputField=wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='inline-playlist-name-input']")));
+        playlistInputField.sendKeys(Keys.chord(Keys.CONTROL+"A",Keys.BACK_SPACE));
+
+        playlistInputField.sendKeys(name);
+        playlistInputField.sendKeys(Keys.ENTER);
+    }
+
+    public  void doubleClickPlaylist(){
+        WebElement playlistToRename= wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".playlist.playlist:nth-of-type(3)")));
+        action.doubleClick(playlistToRename).perform();
+        System.out.println("double click performed.");
+    }
+
+   /*public void clickEditToRename() {
+        WebElement edit= wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("li[data-testid=\"playlist-context-menu-edit-102592\"]")));
+        edit.click();
+    }
+
+    public void rightClickPlaylistToRename() {
+        WebElement playlistToRename= wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//section[@id='playlists']//li//a[text()='apple']")));
+        System.out.println("Element found: " + playlistToRename.getText());
+        action.contextClick(playlistToRename).perform();
+        System.out.println("Right-click performed on the 'apple' playlist.");
+        //WebElement contextMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("nav[class=\"menu playlist-item-menu\"]")));
+        //System.out.println("Context menu is visible: " + contextMenu.isDisplayed());
+    }*/
 }
