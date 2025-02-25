@@ -6,11 +6,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
 
+
+
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.time.Duration;
 
 public class BaseTest {
@@ -33,11 +40,12 @@ public class BaseTest {
 
     @BeforeMethod
     @Parameters({"BaseURL"})
-    public void launchBrowser(String BaseURL) {
+    public void launchBrowser(String BaseURL) throws MalformedURLException {
         //      Added ChromeOptions argument below to fix websocket error
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-         driver = new ChromeDriver(options);
+       // ChromeOptions options = new ChromeOptions();
+       // options.addArguments("--remote-allow-origins=*");
+        // driver = new ChromeDriver(options);
+        driver = pickBrowser(System.getProperty("browser"));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
         wait=new WebDriverWait(driver,Duration.ofSeconds(10));
@@ -53,6 +61,41 @@ public class BaseTest {
     public void closeBrowser() {
         driver.quit();
     }
+
+    public WebDriver pickBrowser(String browser) throws MalformedURLException {
+        String gridUrl = "http://192.168.0.159:4444"; // replace with our grid url
+        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+        switch (browser) {
+            case "firefox":
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver();
+                return driver;
+            case "chrome":
+                WebDriverManager.chromedriver().setup();
+                ChromeOptions options = new ChromeOptions();
+                options.addArguments("--remote-allow-origins=*");
+                options.addArguments("--disable-notifications");
+                driver = new ChromeDriver(options);
+                return driver;
+            case "grid-chrome":
+                desiredCapabilities.setBrowserName("chrome");
+                driver = new RemoteWebDriver(URI.create(gridUrl).toURL(), desiredCapabilities);
+                return driver;
+            case "grid-firefox":
+                desiredCapabilities.setCapability("browserName", "firefox");
+                driver = new RemoteWebDriver(URI.create(gridUrl).toURL(), desiredCapabilities);
+                return driver;
+            default:
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver();
+                return driver;
+        }
+    }
+
+    public void overlay(){
+        boolean isInvisible=wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("overlay")));
+    }
+
 
     public void provideEmail(String email){
         WebElement emailField=driver.findElement(By.cssSelector("input[type='email']"));
