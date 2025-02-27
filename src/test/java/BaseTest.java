@@ -18,13 +18,17 @@ import org.testng.annotations.*;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.time.Duration;
+import java.util.HashMap;
 
 public class BaseTest {
     public WebDriver driver=null;
     public WebDriverWait wait=null;
     String url=null;
     Actions action=null;
+    // ThreadLocal for WebDriver to support parallel execution
+    private static final ThreadLocal<WebDriver> threadDriver=new ThreadLocal<>();
 
     @DataProvider(name = "playlistNames")
     public Object[][] playlistNames(){
@@ -33,37 +37,44 @@ public class BaseTest {
         };
     }
 
-    @BeforeSuite
-    static void setupClass() {
-        WebDriverManager.chromedriver().setup();
-    }
+//    @BeforeSuite
+//    static void setupClass() {
+//        WebDriverManager.chromedriver().setup();
+//    }
 
     @BeforeMethod
     @Parameters({"BaseURL"})
     public void launchBrowser(String BaseURL) throws MalformedURLException {
-        //      Added ChromeOptions argument below to fix websocket error
-       // ChromeOptions options = new ChromeOptions();
-       // options.addArguments("--remote-allow-origins=*");
-        // driver = new ChromeDriver(options);
-        driver = pickBrowser(System.getProperty("browser"));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.manage().window().maximize();
-        wait=new WebDriverWait(driver,Duration.ofSeconds(10));
-        action=new Actions(driver);
+        // Set WebDriver based on system property (in build.gradle)
+        threadDriver.set(pickBrowser(System.getProperty("browser")));
+         getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        getDriver().manage().window().maximize();
+        wait=new WebDriverWait(getDriver(),Duration.ofSeconds(10));
+        action=new Actions(getDriver());
         url=BaseURL;
         navigateToPage();
     }
 
-    public void navigateToPage() {
-         driver.get(url);
-    }
-    @AfterMethod
-    public void closeBrowser() {
-        driver.quit();
+    // It returns current instance of webDriver associated with the current thread.(Parallel testing)
+    public WebDriver getDriver() {
+        return threadDriver.get();
     }
 
+    @AfterMethod(alwaysRun=true)
+    public void closeDriver() {
+        threadDriver.get().quit(); // Clean up WebDriver instance after each test
+    }
+
+    public void navigateToPage() {
+         threadDriver.get().get(url);
+    }
+//    @AfterMethod
+//    public void closeBrowser() {
+//        driver.quit();
+//    }
+
     public WebDriver pickBrowser(String browser) throws MalformedURLException {
-        String gridUrl = "http://192.168.0.159:4444"; // replace with our grid url
+        String gridUrl = "http://192.168.1.149:4444"; // replace with our grid url
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         switch (browser) {
             case "firefox":
@@ -85,11 +96,33 @@ public class BaseTest {
                 desiredCapabilities.setCapability("browserName", "firefox");
                 driver = new RemoteWebDriver(URI.create(gridUrl).toURL(), desiredCapabilities);
                 return driver;
+            case "cloud":
+                return getLambdaDriver();
             default:
                 WebDriverManager.firefoxdriver().setup();
                 driver = new FirefoxDriver();
                 return driver;
         }
+    }
+
+    public WebDriver getLambdaDriver() throws MalformedURLException {
+        String userName = "kavya.new24";
+        String authKey = "LT_pr7pusiWCpCtmMPWmQBXnJS7jDx18PaBQPxmmTrRze2UrX8";
+        String hubURL = "https://hub.lambdatest.com/wd/hub";
+
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("browserName", "Chrome");
+        capabilities.setCapability("browserVersion", "130.0");
+        HashMap<String, Object> ltOptions = new HashMap<>();
+        ltOptions.put("username", userName);
+        ltOptions.put("accessKey", authKey);
+        ltOptions.put("project", "Koel");
+        ltOptions.put("w3c", true);
+        ltOptions.put("plugin", "java-testNG");
+        ltOptions.put("platformName", "Windows 10");
+        capabilities.setCapability("LT:Options", ltOptions);
+
+        return new RemoteWebDriver(new URL(hubURL), capabilities);
     }
 
     public void overlay(){
@@ -98,19 +131,19 @@ public class BaseTest {
 
 
     public void provideEmail(String email){
-        WebElement emailField=driver.findElement(By.cssSelector("input[type='email']"));
+        WebElement emailField=getDriver().findElement(By.cssSelector("input[type='email']"));
         emailField.clear();
         emailField.sendKeys(email);
     }
 
     public void providePassword(String password){
-        WebElement passwordField=driver.findElement(By.cssSelector("input[type='password']"));
+        WebElement passwordField=getDriver().findElement(By.cssSelector("input[type='password']"));
         passwordField.clear();
         passwordField.sendKeys(password);
     }
 
     public void clickSubmit(){
-        WebElement submitButton=driver.findElement(By.cssSelector("button[type='submit']"));
+        WebElement submitButton=getDriver().findElement(By.cssSelector("button[type='submit']"));
         submitButton.click();
     }
 
@@ -145,17 +178,17 @@ public class BaseTest {
     }
 
     public void clickPlayOrResumeBtn() {
-        WebElement playBtn=driver.findElement(By.cssSelector("[data-testid='play-btn']"));
+        WebElement playBtn=getDriver().findElement(By.cssSelector("[data-testid='play-btn']"));
         playBtn.click();
     }
 
     public void clickPlayNextSongBtn() {
-        WebElement playNextSongBtn= driver.findElement(By.cssSelector("[data-testid=\"play-next-btn\"]"));
+        WebElement playNextSongBtn= getDriver().findElement(By.cssSelector("[data-testid=\"play-next-btn\"]"));
         playNextSongBtn.click();
     }
 
     public boolean getSoundBar() {
-        WebElement soundBar=driver.findElement(By.cssSelector("[data-testid=\"sound-bar-play\"]"));
+        WebElement soundBar=getDriver().findElement(By.cssSelector("[data-testid=\"sound-bar-play\"]"));
         return soundBar.isDisplayed();
     }
 

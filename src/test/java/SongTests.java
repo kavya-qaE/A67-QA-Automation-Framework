@@ -7,9 +7,9 @@ import pom.SongsPage;
 public class SongTests extends BaseTest{
     @Test
     public void addSongToFavorites() {
-        LoginPageFactory loginPageFactory = new LoginPageFactory(driver);
-        SongsPage songsPage = new SongsPage(driver);
-        PlaylistPage playlistPage = new PlaylistPage(driver);
+        LoginPageFactory loginPageFactory = new LoginPageFactory(getDriver());
+        SongsPage songsPage = new SongsPage(getDriver());
+        PlaylistPage playlistPage = new PlaylistPage(getDriver());
 
         loginPageFactory.provideEmail("kavya.ilapavuluri@testpro.io");
         loginPageFactory.providePassword("student#67");
