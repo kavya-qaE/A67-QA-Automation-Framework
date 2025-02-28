@@ -16,14 +16,10 @@ dependencies {
     implementation 'com.github.javafaker:javafaker:1.0.2'
 }
 
+
 test {
     useTestNG() {
-        suites "src/test/resources/TestNG.xml"
+        suites "src/test/resources/{suite}.xml"
+        systemProperty "browser", System.getProperty("browser")
     }
-}
-    test {
-        useTestNG() {
-            suites "src/test/resources/New.xml"
-            systemProperty "browser", System.getProperty("browser")
-        }
 }
