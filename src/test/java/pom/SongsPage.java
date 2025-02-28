@@ -3,6 +3,7 @@ package pom;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class SongsPage extends BasePageFactory{
 
@@ -29,7 +30,8 @@ public class SongsPage extends BasePageFactory{
         return songTitle.getText();
     }
     public void addSongToFav () {
-        unlikedSong.click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(unlikedSong)).click();
     }
     public void clickAllSongs () {
         allSongs.click();
