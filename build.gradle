@@ -23,3 +23,11 @@ test {
         systemProperty "browser", System.getProperty("browser")
     }
 }
+
+test {
+    // Enable JUnit XML report generation
+    reports {
+        junitXml.required = true
+        junitXml.destination = file("${buildDir}/test-results/test")
+    }
+}
