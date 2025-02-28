@@ -8,13 +8,13 @@ public class LoginTests extends BaseTest {
     @Test
 
     public void loginEmptyEmailPassword() {
-        //LoginPage loginPage=new LoginPage(driver);
-        HomePage homePage=new HomePage(driver);
+        //LoginPage loginPage=new LoginPage(getDriver());
+        HomePage homePage=new HomePage(getDriver());
         //loginPage.provideEmail("kavya.ilapavuluri@testpro.io");
         //loginPage.providePassword("student#67");
         //loginPage.clickSubmit();
 
-        LoginPageFactory loginPageFactory=new LoginPageFactory(driver);
+        LoginPageFactory loginPageFactory=new LoginPageFactory(getDriver());
         loginPageFactory.provideEmail("kavya.ilapavuluri@testpro.io");
         loginPageFactory.providePassword("student#67");
         loginPageFactory.clickSubmit();
