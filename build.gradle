@@ -24,10 +24,10 @@ test {
     }
 }
 
-test {
-    // Enable JUnit XML report generation
-    reports {
-        junitXml.required = true
-        junitXml.destination = file("${buildDir}/test-results/test")
-    }
-}
+//test {
+//    // Enable JUnit XML report generation
+//    reports {
+//        junitXml.required = true
+//        junitXml.destination = file("${buildDir}/test-results/test")
+//    }
+//}
