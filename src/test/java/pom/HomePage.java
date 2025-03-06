@@ -12,7 +12,6 @@ public class HomePage extends BasePage{
 
     By userAvatorIcon= By.cssSelector("img.avator");
 
-
     /*public WebElement getUserAvator(){
         return findElement(userAvatorIcon);
     }*/

@@ -2,24 +2,21 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import pom.HomePage;
 import pom.LoginPage;
-import pom.LoginPageFactory;
 
 public class LoginTests extends BaseTest {
-    @Test
-
-    public void loginEmptyEmailPassword() {
-        //LoginPage loginPage=new LoginPage(getDriver());
+    @Test(dataProvider = "ValidCredentials", dataProviderClass = DataProviderClass.class)
+    public void loginWithValidCredentials(String email,String password) {
+        LoginPage loginPageFactory=new LoginPage(getDriver());
         HomePage homePage=new HomePage(getDriver());
-        //loginPage.provideEmail("kavya.ilapavuluri@testpro.io");
-        //loginPage.providePassword("student#67");
-        //loginPage.clickSubmit();
-
-        LoginPageFactory loginPageFactory=new LoginPageFactory(getDriver());
-        loginPageFactory.provideEmail("kavya.ilapavuluri@testpro.io");
-        loginPageFactory.providePassword("student#67");
-        loginPageFactory.clickSubmit();
-
-
+        loginPageFactory.login(email,password);
         Assert.assertEquals("https://qa.koel.app/",homePage.currentUrl());
+    }
+
+    @Test(dataProvider = "InvalidCredentials", dataProviderClass = DataProviderClass.class)
+    public void loginWithInvalidCredentials(String email,String password) {
+        LoginPage loginPageFactory=new LoginPage(getDriver());
+        HomePage homePage=new HomePage(getDriver());
+        loginPageFactory.login(email,password);
+        Assert.assertTrue(loginPageFactory.clickLoginBtn.isDisplayed());
     }
 }
