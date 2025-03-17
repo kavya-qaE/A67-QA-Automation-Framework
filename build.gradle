@@ -16,6 +16,13 @@ dependencies {
     implementation 'com.github.javafaker:javafaker:1.0.2'
 }
 
+test {
+    useTestNG() {
+        suites "src/test/resources/Regression.xml"
+        systemProperty "browser", System.getProperty("browser")
+    }
+}
+
 
 test {
     useTestNG() {
