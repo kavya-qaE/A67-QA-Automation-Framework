@@ -11,15 +11,7 @@
           <class name="SongTests"/>
           <class name="PlaylistTests"/>
           <class name="RegistrationTests"/>
-
-<suite name="TestNG">
-<parameter name="BaseURL" value="https://qa.koel.app/">
-    <test name="Example Test" preserve-order="false" thread-count="2" parallel="methods">
-      <classes>
-            <class name="LoginTests"/>
-            <class name="BaseTest"/>
-            <class name="SongTests"/>
-
+          <class name="Internship"/>
         </classes>
     </test>
 </parameter>
