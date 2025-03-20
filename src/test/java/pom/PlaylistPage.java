@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -78,7 +79,24 @@ public class PlaylistPage extends BasePage {
     public void inputNewPlaylistName(String name){
         newPlaylistName.clear();
         newPlaylistName.sendKeys(name);
+        // Validate the playlist name length
+        if (name.length() < 3 || name.length() > 10) {
+           System.out.println("Playlist name should have a length between 3 and 10 characters.");
+            return;
+        }
         newPlaylistName.sendKeys(Keys.ENTER);
+    }
+
+    public boolean isPlaylistExists(String playlistName) {
+        //  list of playlist names displayed on the page
+        List<WebElement> playlists = driver.findElements(By.xpath("//*[@id='playlists']//ul//li//a"));
+        // Loop through the playlist elements and check if any match the provided name
+        for (WebElement playlist : playlists) {
+            if (playlist.getText().equals(playlistName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
