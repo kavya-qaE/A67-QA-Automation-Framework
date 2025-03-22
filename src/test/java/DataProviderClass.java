@@ -17,7 +17,7 @@ public class DataProviderClass {
     @DataProvider(name = "playlistNames")
     public Object[][] playlistNames(){
         return new Object[][]{
-                {"melody"}
+                {"first"}
         };
     }
 
