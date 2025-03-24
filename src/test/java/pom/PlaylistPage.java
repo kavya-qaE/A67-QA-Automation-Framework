@@ -80,13 +80,39 @@ public class PlaylistPage extends BasePage {
         newPlaylistName.clear();
         newPlaylistName.sendKeys(name);
         // Validate the playlist name length
-        if (name.length() < 3 || name.length() > 10) {
-           System.out.println("Playlist name should have a length between 3 and 10 characters.");
+        //3.Playlist name should have at least 3 characters, but no more than 10.
+        // Otherwise, show a red border and don't create a playlist(There is no css value available on page to check for red border)
+        if (name.length() < 3) {
+           System.out.println("Playlist name length is less than 3 characters ");
+            return;
+        }
+        else if (name.length() > 10) {
+            System.out.println("Playlist name length is more than 10 characters.");
             return;
         }
         newPlaylistName.sendKeys(Keys.ENTER);
     }
 
+    public boolean checkPlaylistLength(String name) {
+        newPlaylistName.clear();
+        newPlaylistName.sendKeys(name);
+        // Validate the playlist name length
+        //3.Playlist name should have at least 3 characters, but no more than 10.
+        // Otherwise, show a red border and don't create a playlist(There is no css value available on page to check for red border)
+        if (name.length() < 3) {
+            System.out.println("Playlist name length is less than 3 characters ");
+            return false;
+        }
+        else if (name.length() > 10) {
+            System.out.println("Playlist name length is more than 10 characters.");
+            return false;
+        }
+        System.out.println("Playlist length is in range");
+        return true;
+    }
+
+    //1.User should not able to create a playlist with the same name
+    //Method to check for Duplicate playlist names
     public boolean isPlaylistExists(String playlistName) {
         //  list of playlist names displayed on the page
         List<WebElement> playlists = driver.findElements(By.xpath("//*[@id='playlists']//ul//li//a"));
@@ -99,9 +125,23 @@ public class PlaylistPage extends BasePage {
         return false;
     }
 
+    //Method to check is playlist displayed
+    public boolean isPlaylistDisplayed(String playlistName) {
+        //  list of playlist names displayed on the page
+        List<WebElement> playlists = driver.findElements(By.xpath("//*[@id='playlists']//ul//li//a"));
+        // Loop through the playlist elements and check if any match the provided name
+        for (WebElement playlist : playlists) {
+            if (playlist.getText().equals(playlistName)) {
+                System.out.println("New playlist is created in Database");
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public String getCreateSuccessMsg() {
-        return notificationCreatedPlaylist.getText();
+        return findElement(notificationCreatedPlaylist).getText();
     }
 //    @FindBy(xpath = "//nav[@id=\"sidebar\"]//section[@id=\"playlists\"]//ul/li//*[text()='" + playlistName + "']")
 //    public WebElement playlistNameToDelete;
@@ -140,6 +180,8 @@ public class PlaylistPage extends BasePage {
         findElement(notification);
         return notification.getText();
     }
+
+
 
     /*public void clickEditToRename() {
         WebElement edit= wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("li[data-testid=\"playlist-context-menu-edit-102592\"]")));
