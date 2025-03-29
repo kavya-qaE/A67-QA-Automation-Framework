@@ -79,17 +79,6 @@ public class PlaylistPage extends BasePage {
     public void inputNewPlaylistName(String name){
         newPlaylistName.clear();
         newPlaylistName.sendKeys(name);
-        // Validate the playlist name length
-        //3.Playlist name should have at least 3 characters, but no more than 10.
-        // Otherwise, show a red border and don't create a playlist(There is no css value available on page to check for red border)
-        if (name.length() < 3) {
-           System.out.println("Playlist name length is less than 3 characters ");
-            return;
-        }
-        else if (name.length() > 10) {
-            System.out.println("Playlist name length is more than 10 characters.");
-            return;
-        }
         newPlaylistName.sendKeys(Keys.ENTER);
     }
 

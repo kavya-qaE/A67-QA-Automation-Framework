@@ -44,14 +44,10 @@ public class Internship extends BaseTest {
         PlaylistPage playlistPage = new PlaylistPage(getDriver());
 
         loginPage.login(email, password);
-        // Method to Check if playlist name already exists
-        if (playlistPage.isPlaylistExists(playlistName)) {
-            System.out.println("Playlist with name \"" + playlistName + "\" already exists.");
-        } else {
-            playlistPage.clickPlusToCreate();
-            playlistPage.clickNewPlaylistToCreate();
-            playlistPage.inputNewPlaylistName(playlistName);
-        }
+        playlistPage.clickPlusToCreate();
+        playlistPage.clickNewPlaylistToCreate();
+        playlistPage.inputNewPlaylistName(playlistName);
+
         Assert.assertEquals(playlistPage.getCreateSuccessMsg(), expectedCreatedPlaylistMsg);
         //User’s playlist should displays correctly DB
         boolean playlistCreated = playlistPage.isPlaylistDisplayed(playlistName);
@@ -59,6 +55,6 @@ public class Internship extends BaseTest {
         //Delete Playlist
         playlistPage.choosePlaylistToDelete(playlistName);
         playlistPage.clickRedPlaylistBtn();
-
     }
+
 }

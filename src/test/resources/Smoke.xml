@@ -4,22 +4,12 @@
 
 <suite name="Smoke">
     <parameter name="BaseURL" value="https://qa.koel.app/">
-        <test name="Smoke" preserve-order="false">
+        <test name="Smoke Test" preserve-order="false" thread-count="2" parallel="methods">
         <classes>
             <class name="LoginTests">
                 <methods>
                     <include name="loginWithValidCredentials"/>
-                        <include name="loginWithInvalidCredentials">
-
-<suite name="homework18">
-    <parameter name="BaseURL" value="https://qa.koel.app/">
-        <test name="play song" preserve-order="false">
-        <classes>
-            <class name="Homework18">
-                <methods>
-                    <include name="playSong">
-
-                    </include>
+                    <include name="loginWithInvalidCredentials"/>
                 </methods>
             </class>
         </classes>

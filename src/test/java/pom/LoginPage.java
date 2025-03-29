@@ -20,17 +20,17 @@ public class LoginPage extends BasePage {
     public WebElement clickLoginBtn;
 
     public LoginPage provideEmail(String email){
-        emailField.sendKeys(email);
+        findElement(emailField).sendKeys(email);
         return this;
     }
 
     public LoginPage providePassword(String password){
-        passwordField.sendKeys(password);
+        findElement(passwordField).sendKeys(password);
         return this;
     }
 
     public void clickLoginBtn(){
-        clickLoginBtn.click();
+        findElement(clickLoginBtn).click();
     }
 
     public void login(String email,String password){
@@ -39,5 +39,10 @@ public class LoginPage extends BasePage {
         clickLoginBtn();
     }
 
+    public void login(){
+        provideEmail("kavya.ilapavuluri@testpro.io");
+        providePassword("student#67");
+        clickLoginBtn();
+    }
 
 }
