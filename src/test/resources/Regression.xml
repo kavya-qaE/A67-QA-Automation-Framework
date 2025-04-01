@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-
 <suite name="Regression">
 <parameter name="BaseURL" value="https://qa.koel.app/">
-    <test name="Example Test" preserve-order="false" thread-count="2" parallel="methods">
+    <test name="Koel Test" preserve-order="false" thread-count="2" parallel="classes">
       <classes>
           <class name="LoginTests"/>
           <class name="BaseTest"/>
@@ -12,6 +11,7 @@
           <class name="PlaylistTests"/>
           <class name="RegistrationTests"/>
           <class name="Internship"/>
+          <class name="Internship2"/>
         </classes>
     </test>
 </parameter>
